@@ -1,0 +1,73 @@
+#!/bin/bash
+
+function create_local() {
+
+    # Get .env data
+    source .newproj.env
+
+    # Go to projects folder
+    cd $PROJPATH
+    mkdir $1
+    cd $1
+
+    # Create local git repo
+    git init
+
+    # Create README.md file, insert project name into it and commit changes
+    touch README.md
+    echo "# $1" > README.md
+    git add .
+    git commit -m "Initial commit"
+
+    echo "Local repository is created, all changes are commited locally."
+}
+
+function create_add_remote() {
+
+    # Create remote repository
+    python ~/.local/bin/crrogh.py $1 $GHUSERNAME $GHPASSTOK
+
+    # Add link to remote repository
+    git remote add origin git@github.com:$GHUSERNAME/$1.git
+
+    # Push deafault branch
+    defBr=`git config --global init.defaultBranch`
+    git push -u origin $defBr
+
+    echo "Remote repository is synced with local."
+}
+
+function open_editor() {
+
+    # Open project in visual studio code
+    code .
+
+    echo "New project is created successfully."
+}
+
+if [ -z $1 ]; then
+    echo "Error: no argument is given"
+    echo "Try: newproj <project name>"
+elif [ $1 = "-h" ] || [ $1 = "--help" ]; then
+    echo "To use this command type: 'newproj <project name>'"
+    echo "To create project locally type: 'newproj <project name> -l' you can use '--locally' instead of '-l'"
+    echo "Do not use spaces in project name. Reasons: strange behaviour"
+elif [ $1 = "-l" ] || [ $1 = "--local" ]; then
+    echo "To use this command type: 'newproj <project name> -l'"
+    echo "Or this command type: 'newproj <project name> --locale'"
+    echo "Soon will add support for this (maybe)"
+else
+    if [ -z $2 ]; then
+        create_local $1
+        create_add_remote $1
+        open_editor
+    else
+        if [ $2 = '-l' ] || [ $2 = "--locale" ]; then
+            create_local $1
+            open_editor
+        else
+            echo "Use 'newproj $1 -l' or 'newproj $1 --local' to create project locally"
+            echo "Use 'newproj $1' to create local and remote copy of the project"
+        fi
+    fi
+fi
