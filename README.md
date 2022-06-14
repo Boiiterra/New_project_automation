@@ -1,9 +1,13 @@
 # New project automation
 
 This project automates creation of the new ones. \
-I created it for myself and for linux so if it doesn't work for you just `make it yours`.
+If it doesn't work for you just `make it yours`.
+
+<br>
 
 # Installation
+How to install this command/scripts. \
+!!! MAKE SURE THAT YOU ENTER ALL YOUR DATA CORRECTLY !!!
 
 <br>
 
@@ -39,6 +43,7 @@ PROJPATH="Path to projects folder"
 ```
 
 # Usage
+How to use this command/scripts
 
 <br>
 
